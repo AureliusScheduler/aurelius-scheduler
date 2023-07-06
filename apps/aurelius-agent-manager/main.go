@@ -1,12 +1,10 @@
 package main
 
-import "fmt"
-
-func Hello(name string) string {
-	result := "Hello " + name
-	return result
-}
+import (
+	"aurelius/apps/aurelius-agent-manager/bundler"
+	"go.uber.org/fx"
+)
 
 func main() {
-	fmt.Println(Hello("aurelius-agent-manager"))
+	fx.New(bundler.Module).Run()
 }

@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+option go_package = "aurelius/agent_manager/proto";
+
+service AureliusAgentManager {
+  rpc AgentChat(stream ChatRequest) returns (stream AgentChatResponse) {}
+}
+
+message ChatRequest {
+  oneof payload {
+    RegisterAgentRequest registerAgentRequest = 1;
+    RegisterJobRequest registerJobRequest = 2;
+  }
+}
+
+message RegisterAgentRequest {
+  string agentId = 1;
+}
+
+message RegisterJobRequest {
+  string jobId = 1;
+}
+
+message AgentChatResponse {
+  string agentId = 1;
+  string message = 2;
+}
