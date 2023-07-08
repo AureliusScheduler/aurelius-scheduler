@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "aurelius/agent_manager/proto";
+option go_package = "aurelius/aurelius_protobuf";
 
 service AureliusAgentManager {
   rpc AgentChat(stream ChatRequest) returns (stream AgentChatResponse) {}

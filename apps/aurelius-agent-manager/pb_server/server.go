@@ -1,7 +1,7 @@
 package pb_server
 
 import (
-	pb "aurelius/apps/aurelius-agent-manager/proto"
+	"aurelius/libs/aurelius-protobuf/generated"
 	"go.uber.org/fx"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -10,7 +10,7 @@ import (
 )
 
 type PbServer struct {
-	pb.UnimplementedAureliusAgentManagerServer
+	aurelius_protobuf.UnimplementedAureliusAgentManagerServer
 	//Server pb.UnimplementedAureliusAgentManagerServer
 }
 
@@ -18,7 +18,7 @@ func NewPbServer() *PbServer {
 	return &PbServer{}
 }
 
-func (s *PbServer) AgentChat(srv pb.AureliusAgentManager_AgentChatServer) error {
+func (s *PbServer) AgentChat(srv aurelius_protobuf.AureliusAgentManager_AgentChatServer) error {
 	log.Println("Start AgentChat")
 	ctx := srv.Context()
 
@@ -42,18 +42,18 @@ func (s *PbServer) AgentChat(srv pb.AureliusAgentManager_AgentChatServer) error 
 		response := ""
 
 		switch payload := req.Payload.(type) {
-		case *pb.ChatRequest_RegisterAgentRequest:
+		case *aurelius_protobuf.ChatRequest_RegisterAgentRequest:
 			registerAgentRequest := payload.RegisterAgentRequest
 			log.Println("Register agent request", registerAgentRequest)
 			response = "Agent registered"
 
-		case *pb.ChatRequest_RegisterJobRequest:
+		case *aurelius_protobuf.ChatRequest_RegisterJobRequest:
 			registerJobRequest := payload.RegisterJobRequest
 			log.Println("Register job request", registerJobRequest)
 			response = "Job registered"
 		}
 
-		res := pb.AgentChatResponse{
+		res := aurelius_protobuf.AgentChatResponse{
 			Message: response,
 		}
 
@@ -73,7 +73,7 @@ func (s *PbServer) Listen() {
 	}
 
 	server := grpc.NewServer()
-	pb.RegisterAureliusAgentManagerServer(server, s)
+	aurelius_protobuf.RegisterAureliusAgentManagerServer(server, s)
 	reflection.Register(server)
 
 	if err := server.Serve(lis); err != nil {

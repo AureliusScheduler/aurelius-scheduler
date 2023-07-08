@@ -4,7 +4,7 @@
 // - protoc             v4.23.3
 // source: service.proto
 
-package proto
+package aurelius_protobuf
 
 import (
 	context "context"
