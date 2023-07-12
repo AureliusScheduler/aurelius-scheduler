@@ -30,3 +30,90 @@ sequenceDiagram
   deactivate S
   
 ```
+
+
+## Data model
+
+### Agents
+
+```mermaid
+erDiagram
+  aur_service {
+    uuid id PK
+    varchar(255) name
+  }
+  
+  aur_agent {
+    uuid id PK
+    varchar(255) service_id
+    varchar(10) agent_stack
+    varchar(10) agent_version
+    datetime registered_at
+    datetime last_seen_at
+  }
+  
+  aur_agent_job {
+    uuid id PK
+    uuid agent_id FK
+    varchar(255) job_name
+    varchar(255) job_version
+    datetime started_at
+    datetime finished_at
+  }
+  
+  aur_job_schedule {
+    uuid id PK
+    varchar(255) job_name
+    varchar(255) cron   
+    datetime created_at
+    datetime updated_at
+  }
+  
+  aur_job_instance {
+    uuid id PK
+    uuid service_id FK
+    uuid agent_job_id FK
+    uuid job_schedule_id FK NULL
+    varchar(255) agent_stack
+    datetime started_at
+    datetime finished_at
+  }
+  
+  aur_job_instance_log {
+    uuid id PK
+    uuid job_instance_id FK
+    varchar(255) level
+    varchar(255) message
+    datetime created_at
+  }
+  
+  aur_service ||--o{ aur_agent : agents
+  aur_agent ||--o{ aur_agent_job : jobs
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
