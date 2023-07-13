@@ -7,10 +7,16 @@
     "test": {
       "executor": "@nx-go/nx-go:test"
     },
-    "recreate-db": {
+    "recreate": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "go run libs/aurelius-mysql/main.go --host localhost --port 3308 --password aurelius --user aurelius --db aurelius"
+        "command": "go run libs/aurelius-mysql/main.go recreate --host localhost --port 3308 --password aurelius --user aurelius --db aurelius"
+      }
+    },
+    "seed": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "go run libs/aurelius-mysql/main.go seed --host localhost --port 3308 --password aurelius --user aurelius --db aurelius"
       }
     },
     "lint": {

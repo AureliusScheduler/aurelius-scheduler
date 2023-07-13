@@ -7,10 +7,11 @@ import (
 
 type Agent struct {
 	Base
-	ServiceID    uuid.UUID
-	Service      Service `gorm:"foreignKey:ServiceID"`
+	ServiceID    uuid.UUID `gorm:"type:varchar(36);index"`
+	Service      Service   `gorm:"foreignKey:ServiceID"`
 	AgentStack   string
 	AgentVersion string
+	Jobs         []Job
 	RegisteredAt time.Time
 	LastSeenAt   time.Time
 }
