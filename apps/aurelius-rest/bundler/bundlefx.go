@@ -4,7 +4,7 @@ import (
 	"aurelius/apps/aurelius-rest/controllers"
 	"aurelius/apps/aurelius-rest/db"
 	"aurelius/apps/aurelius-rest/routes"
-	"aurelius/libs/aurelius-mysql"
+	"aurelius/libs/aurelius-mysql/bundler"
 	"context"
 	"fmt"
 	"go.uber.org/fx"
@@ -12,7 +12,7 @@ import (
 
 var Module = fx.Options(
 	fx.Provide(db.NewDbOptions),
-	aurelius_mysql.Module,
+	bundler.Module,
 	controllers.Module,
 	routes.Module,
 	fx.Invoke(runApplication),

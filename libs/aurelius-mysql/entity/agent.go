@@ -14,3 +14,7 @@ type Agent struct {
 	RegisteredAt time.Time
 	LastSeenAt   time.Time
 }
+
+func (Agent) TableName() string {
+	return "aur_agent"
+}

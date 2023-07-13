@@ -13,8 +13,12 @@ const (
 
 type JobInstanceLog struct {
 	Base
-	JobInstanceID uuid.UUID   `gorm:"type:uuid;index"`
+	JobInstanceID uuid.UUID   `gorm:"type:varchar(36);index"`
 	JobInstance   JobInstance `gorm:"foreignKey:JobInstanceID"`
 	Message       string
 	Level         LogLevel `gorm:"type:enum('debug','info','warn','error');default:'info'"`
+}
+
+func (JobInstanceLog) TableName() string {
+	return "aur_job_instance_log"
 }
