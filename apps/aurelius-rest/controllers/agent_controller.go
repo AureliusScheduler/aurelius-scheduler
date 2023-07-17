@@ -12,7 +12,7 @@ type AgentController struct {
 
 func NewAgentController(service *service.AgentService) AgentController {
 	return AgentController{
-		Get: getAll(service),
+		Get: getAllAgents(service),
 	}
 }
 
@@ -22,7 +22,7 @@ func NewAgentController(service *service.AgentService) AgentController {
 // @Success 200 {array} dto.AgentDto
 // @Tags agents
 // @Router /agents [get]
-func getAll(service *service.AgentService) func(c *gin.Context) {
+func getAllAgents(service *service.AgentService) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		items, err := service.GetAll()
 

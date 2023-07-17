@@ -53,7 +53,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/controllers.scheduledJob"
+                                "$ref": "#/definitions/dto.JobDto"
                             }
                         }
                     }
@@ -62,20 +62,6 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "controllers.scheduledJob": {
-            "type": "object",
-            "properties": {
-                "cron": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
         "dto.AgentDto": {
             "type": "object",
             "properties": {
@@ -95,6 +81,29 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "service": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.JobDto": {
+            "type": "object",
+            "properties": {
+                "agentId": {
+                    "type": "string"
+                },
+                "finishedAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "startedAt": {
+                    "type": "string"
+                },
+                "version": {
                     "type": "string"
                 }
             }

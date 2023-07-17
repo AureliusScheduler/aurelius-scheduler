@@ -1,13 +1,4 @@
 definitions:
-  controllers.scheduledJob:
-    properties:
-      cron:
-        type: string
-      id:
-        type: integer
-      name:
-        type: string
-    type: object
   dto.AgentDto:
     properties:
       agent_stack:
@@ -21,6 +12,21 @@ definitions:
       registered_at:
         type: string
       service:
+        type: string
+    type: object
+  dto.JobDto:
+    properties:
+      agentId:
+        type: string
+      finishedAt:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      startedAt:
+        type: string
+      version:
         type: string
     type: object
 host: localhost:8080
@@ -51,7 +57,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/controllers.scheduledJob'
+              $ref: '#/definitions/dto.JobDto'
             type: array
       summary: Get all scheduled jobs
       tags:

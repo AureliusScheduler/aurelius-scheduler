@@ -35,7 +35,6 @@ func registerRoutes(
 	jobRoutes := handler.Gin.Group("/jobs")
 	{
 		jobRoutes.GET("/", jobController.Get)
-		jobRoutes.POST("/", jobController.Post)
 	}
 
 	agentRoutes := handler.Gin.Group("/agents")

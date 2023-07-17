@@ -9,8 +9,8 @@ type Job struct {
 	Base
 	AgentID    uuid.UUID `gorm:"type:varchar(36);index"`
 	Agent      Agent     `gorm:"foreignKey:AgentID"`
-	JobName    string
-	JobVersion string
+	Name       string
+	Version    string
 	StartedAt  time.Time
 	FinishedAt time.Time
 }
