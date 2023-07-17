@@ -4,6 +4,7 @@ import (
 	"aurelius/apps/aurelius-rest/controllers"
 	"aurelius/apps/aurelius-rest/db"
 	"aurelius/apps/aurelius-rest/routes"
+	"aurelius/apps/aurelius-rest/service"
 	"aurelius/libs/aurelius-mysql/bundler"
 	"context"
 	"fmt"
@@ -14,6 +15,7 @@ var Module = fx.Options(
 	fx.Provide(db.NewDbOptions),
 	bundler.Module,
 	controllers.Module,
+	service.Module,
 	routes.Module,
 	fx.Invoke(runApplication),
 )

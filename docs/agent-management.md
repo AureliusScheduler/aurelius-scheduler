@@ -38,14 +38,9 @@ sequenceDiagram
 
 ```mermaid
 erDiagram
-  aur_service {
-    uuid id PK
-    varchar(255) name
-  }
-  
   aur_agent {
     uuid id PK
-    varchar(255) service_id
+    varchar(255) service_name
     varchar(10) agent_stack
     varchar(10) agent_version
     datetime registered_at
@@ -87,7 +82,6 @@ erDiagram
     datetime created_at
   }
   
-  aur_service ||--o{ aur_agent : agents
   aur_agent ||--o{ aur_agent_job : jobs
 ```
 

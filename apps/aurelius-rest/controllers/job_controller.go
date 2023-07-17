@@ -7,7 +7,8 @@ import (
 )
 
 type JobController struct {
-	Get  func(c *gin.Context)
+	Get func(c *gin.Context)
+
 	Post func(c *gin.Context)
 }
 
@@ -30,6 +31,12 @@ var scheduledJobs = []scheduledJob{
 	{ID: 3, Name: "recalculate_invoices", Cron: "0 2 0 * * *"},
 }
 
+// GetScheduledJobs godoc
+// @Summary Get all scheduled jobs
+// @Router /jobs [get]
+// @Produce json
+// @Tags jobs
+// @Success 200 {array} scheduledJob
 func getScheduledJobs(repository storage.JobRepository) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		items, err := repository.GetAll()

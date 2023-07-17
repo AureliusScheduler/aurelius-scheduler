@@ -1,6 +1,7 @@
 package main
 
 import (
+	"aurelius/libs/aurelius-mysql/db_context"
 	"aurelius/libs/aurelius-mysql/entity"
 	"aurelius/libs/aurelius-mysql/seeder"
 	"fmt"
@@ -93,16 +94,16 @@ func seed(cmd *cobra.Command, args []string) {
 	mysqlPassword, _ := cmd.Flags().GetString("password")
 	mysqlDB, _ := cmd.Flags().GetString("db")
 
-	// Connect to the database
-	db, err := gorm.Open(mysql.Open(
-		fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", mysqlUser, mysqlPassword, mysqlHost, mysqlPort, mysqlDB),
-	), &gorm.Config{})
-	if err != nil {
-		log.Fatal("Failed to connect to the database: " + err.Error())
-	}
+	ctx := db_context.NewDbContext(&db_context.DbOptions{
+		Host:     mysqlHost,
+		Port:     mysqlPort,
+		User:     mysqlUser,
+		Password: mysqlPassword,
+		Database: mysqlDB,
+	})
 
 	s := seeder.NewSeeder()
-	s.Seed(db)
+	s.Seed(ctx)
 
 	fmt.Println("Database seeded successfully")
 }

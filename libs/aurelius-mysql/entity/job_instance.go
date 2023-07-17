@@ -13,10 +13,8 @@ const (
 
 type JobInstance struct {
 	Base
-	ServiceID  uuid.UUID `gorm:"type:varchar(36);index"`
-	Service    Service   `gorm:"foreignKey:ServiceID"`
 	AgentJobID uuid.UUID `gorm:"type:varchar(36);index"`
-	AgentJob   Job       `gorm:"foreignKey:AgentJobID"`
+	Job        Job       `gorm:"foreignKey:AgentJobID"`
 	AgentStack string
 	Status     JobInstanceStatus `gorm:"type:enum('pending','running','success','failure');default:'pending'"`
 }

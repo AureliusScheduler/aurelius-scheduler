@@ -1,14 +1,12 @@
 package entity
 
 import (
-	"github.com/gofrs/uuid"
 	"time"
 )
 
 type Agent struct {
 	Base
-	ServiceID    uuid.UUID `gorm:"type:varchar(36);index"`
-	Service      Service   `gorm:"foreignKey:ServiceID"`
+	ServiceName  string
 	AgentStack   string
 	AgentVersion string
 	Jobs         []Job
