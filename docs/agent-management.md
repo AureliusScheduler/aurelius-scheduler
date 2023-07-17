@@ -68,7 +68,7 @@ erDiagram
     uuid id PK
     uuid service_id FK
     uuid agent_job_id FK
-    uuid job_schedule_id FK NULL
+    uuid job_schedule_id FK
     varchar(255) agent_stack
     datetime started_at
     datetime finished_at
