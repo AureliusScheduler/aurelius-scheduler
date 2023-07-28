@@ -1,0 +1,16 @@
+{
+  "name": "aurelius-protobuf",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/aurelius-protobuf",
+  "targets": {
+    "generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "sh gen.sh",
+        "cwd": "libs/aurelius-protobuf"
+      }
+    }
+  },
+  "tags": []
+}

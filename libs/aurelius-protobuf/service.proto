@@ -1,27 +1,60 @@
 syntax = "proto3";
 
 option go_package = "aurelius/aurelius_protobuf";
+option csharp_namespace = "AureliusAgentDotnet.Protobuf";
 
 service AureliusAgentManager {
-  rpc AgentChat(stream ChatRequest) returns (stream AgentChatResponse) {}
+  rpc JobChat(stream JobChatRequest) returns (JobChatResponse) {}
+  rpc RegisterAgent(RegisterAgentRequest) returns (RegisterAgentResponse) {}
 }
 
-message ChatRequest {
+message RunJobRequest {
+  string jobName = 1;
+  string jobVersion = 2;
+}
+
+message JobChatRequest {
   oneof payload {
-    RegisterAgentRequest registerAgentRequest = 1;
-    RegisterJobRequest registerJobRequest = 2;
+    RunJobRequest runJobRequest = 1;
+  }
+}
+
+message RunJobStatus {
+  string agentId = 1;
+  string jobName = 2;
+  string jobVersion = 3;
+  string message = 4;
+}
+
+message RunJobResult {
+  string agentId = 1;
+  string jobName = 2;
+  string jobVersion = 3;
+  bool success = 4;
+  string result = 5;
+}
+
+message JobChatResponse {
+  oneof payload {
+    RunJobStatus runJobStatus = 1;
+    RunJobResult runJobResult = 2;
   }
 }
 
 message RegisterAgentRequest {
-  string agentId = 1;
+  string name = 1;
+  string instance = 2;
+  string stack = 3;
+  string version = 4;
+  repeated JobDefinition jobs = 5;
 }
 
-message RegisterJobRequest {
-  string jobId = 1;
+message JobDefinition {
+  string name = 2;
+  string version = 3;
 }
 
-message AgentChatResponse {
+message RegisterAgentResponse {
   string agentId = 1;
   string message = 2;
 }

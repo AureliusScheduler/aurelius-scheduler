@@ -2,7 +2,11 @@
   "name": "@aurelius/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "serve:agent-manager": "nx run aurelius-agent-manager:serve",
+    "db:recreate": "nx run aurelius-mysql:recreate",
+    "db:seed": "nx run aurelius-mysql:seed"
+  },
   "private": true,
   "devDependencies": {
     "@nx-go/nx-go": "^2.7.0",

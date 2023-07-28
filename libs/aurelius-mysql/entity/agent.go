@@ -6,10 +6,12 @@ import (
 
 type Agent struct {
 	Base
-	ServiceName  string
-	AgentStack   string
-	AgentVersion string
+	Name         string
+	Instance     string
+	Stack        string
+	Version      string
 	Jobs         []Job
+	Registration int `gorm:"type:int(1);default:1"`
 	RegisteredAt time.Time
 	LastSeenAt   time.Time
 }

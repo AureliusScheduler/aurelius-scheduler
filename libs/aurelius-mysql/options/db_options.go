@@ -1,4 +1,4 @@
-package db
+package options
 
 import (
 	"aurelius/libs/aurelius-mysql/db_context"

@@ -16,7 +16,7 @@ func NewSeeder() *Seeder {
 	return &Seeder{}
 }
 
-func (s *Seeder) Seed(ctx db_context.DbContext) {
+func (s *Seeder) Seed(ctx *db_context.DbContext) {
 	serviceNames := []string{"php-service", "nodejs-service", "go-service"}
 	versions := []string{"1.0.0", "1.1.0"}
 
@@ -27,9 +27,10 @@ func (s *Seeder) Seed(ctx db_context.DbContext) {
 		for j := 0; j < num[0]; j++ {
 			ver, _ := faker.RandomInt(0, len(versions)-1, 1)
 			s.Agents = append(s.Agents, entity.Agent{
-				ServiceName:  serviceNames[i],
-				AgentStack:   faker.Word(),
-				AgentVersion: versions[ver[0]],
+				Name:         faker.Word(),
+				Stack:        faker.Word(),
+				Version:      versions[ver[0]],
+				Registration: 1,
 				RegisteredAt: getRandomDateBefore(15),
 				LastSeenAt:   getRandomDateBefore(10),
 			})
@@ -43,10 +44,10 @@ func (s *Seeder) Seed(ctx db_context.DbContext) {
 
 		for k := 0; k < num[0]; k++ {
 			s.Agents[i].Jobs = append(s.Agents[i].Jobs, entity.Job{
-				Name:       faker.Word(),
-				Version:    strconv.Itoa(version[0]),
-				StartedAt:  getRandomDateBefore(15),
-				FinishedAt: getRandomDateBefore(10),
+				Name:    faker.Word(),
+				Version: strconv.Itoa(version[0]),
+				//StartedAt:  null.TimeFrom(getRandomDateBefore(15)),
+				//FinishedAt: null.TimeFrom(getRandomDateBefore(10)),
 			})
 		}
 	}

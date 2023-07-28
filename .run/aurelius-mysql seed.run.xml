@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="aurelius-mysql seed" type="GoApplicationRunConfiguration" factoryName="Go Application">
+    <module name="aurelius" />
+    <working_directory value="$PROJECT_DIR$" />
+    <parameters value="seed --host localhost --port 3308 --password aurelius --user aurelius --db aurelius" />
+    <kind value="FILE" />
+    <package value="aurelius" />
+    <directory value="$PROJECT_DIR$" />
+    <filePath value="$PROJECT_DIR$/libs/aurelius-mysql/main.go" />
+    <method v="2" />
+  </configuration>
+</component>

@@ -22,7 +22,8 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AureliusAgentManagerClient interface {
-	AgentChat(ctx context.Context, opts ...grpc.CallOption) (AureliusAgentManager_AgentChatClient, error)
+	JobChat(ctx context.Context, opts ...grpc.CallOption) (AureliusAgentManager_JobChatClient, error)
+	RegisterAgent(ctx context.Context, in *RegisterAgentRequest, opts ...grpc.CallOption) (*RegisterAgentResponse, error)
 }
 
 type aureliusAgentManagerClient struct {
@@ -33,42 +34,55 @@ func NewAureliusAgentManagerClient(cc grpc.ClientConnInterface) AureliusAgentMan
 	return &aureliusAgentManagerClient{cc}
 }
 
-func (c *aureliusAgentManagerClient) AgentChat(ctx context.Context, opts ...grpc.CallOption) (AureliusAgentManager_AgentChatClient, error) {
-	stream, err := c.cc.NewStream(ctx, &AureliusAgentManager_ServiceDesc.Streams[0], "/AureliusAgentManager/AgentChat", opts...)
+func (c *aureliusAgentManagerClient) JobChat(ctx context.Context, opts ...grpc.CallOption) (AureliusAgentManager_JobChatClient, error) {
+	stream, err := c.cc.NewStream(ctx, &AureliusAgentManager_ServiceDesc.Streams[0], "/AureliusAgentManager/JobChat", opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &aureliusAgentManagerAgentChatClient{stream}
+	x := &aureliusAgentManagerJobChatClient{stream}
 	return x, nil
 }
 
-type AureliusAgentManager_AgentChatClient interface {
-	Send(*ChatRequest) error
-	Recv() (*AgentChatResponse, error)
+type AureliusAgentManager_JobChatClient interface {
+	Send(*JobChatRequest) error
+	CloseAndRecv() (*JobChatResponse, error)
 	grpc.ClientStream
 }
 
-type aureliusAgentManagerAgentChatClient struct {
+type aureliusAgentManagerJobChatClient struct {
 	grpc.ClientStream
 }
 
-func (x *aureliusAgentManagerAgentChatClient) Send(m *ChatRequest) error {
+func (x *aureliusAgentManagerJobChatClient) Send(m *JobChatRequest) error {
 	return x.ClientStream.SendMsg(m)
 }
 
-func (x *aureliusAgentManagerAgentChatClient) Recv() (*AgentChatResponse, error) {
-	m := new(AgentChatResponse)
+func (x *aureliusAgentManagerJobChatClient) CloseAndRecv() (*JobChatResponse, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	m := new(JobChatResponse)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
 	return m, nil
 }
 
+func (c *aureliusAgentManagerClient) RegisterAgent(ctx context.Context, in *RegisterAgentRequest, opts ...grpc.CallOption) (*RegisterAgentResponse, error) {
+	out := new(RegisterAgentResponse)
+	err := c.cc.Invoke(ctx, "/AureliusAgentManager/RegisterAgent", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AureliusAgentManagerServer is the server API for AureliusAgentManager service.
 // All implementations must embed UnimplementedAureliusAgentManagerServer
 // for forward compatibility
 type AureliusAgentManagerServer interface {
-	AgentChat(AureliusAgentManager_AgentChatServer) error
+	JobChat(AureliusAgentManager_JobChatServer) error
+	RegisterAgent(context.Context, *RegisterAgentRequest) (*RegisterAgentResponse, error)
 	mustEmbedUnimplementedAureliusAgentManagerServer()
 }
 
@@ -76,8 +90,11 @@ type AureliusAgentManagerServer interface {
 type UnimplementedAureliusAgentManagerServer struct {
 }
 
-func (UnimplementedAureliusAgentManagerServer) AgentChat(AureliusAgentManager_AgentChatServer) error {
-	return status.Errorf(codes.Unimplemented, "method AgentChat not implemented")
+func (UnimplementedAureliusAgentManagerServer) JobChat(AureliusAgentManager_JobChatServer) error {
+	return status.Errorf(codes.Unimplemented, "method JobChat not implemented")
+}
+func (UnimplementedAureliusAgentManagerServer) RegisterAgent(context.Context, *RegisterAgentRequest) (*RegisterAgentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RegisterAgent not implemented")
 }
 func (UnimplementedAureliusAgentManagerServer) mustEmbedUnimplementedAureliusAgentManagerServer() {}
 
@@ -92,30 +109,48 @@ func RegisterAureliusAgentManagerServer(s grpc.ServiceRegistrar, srv AureliusAge
 	s.RegisterService(&AureliusAgentManager_ServiceDesc, srv)
 }
 
-func _AureliusAgentManager_AgentChat_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(AureliusAgentManagerServer).AgentChat(&aureliusAgentManagerAgentChatServer{stream})
+func _AureliusAgentManager_JobChat_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(AureliusAgentManagerServer).JobChat(&aureliusAgentManagerJobChatServer{stream})
 }
 
-type AureliusAgentManager_AgentChatServer interface {
-	Send(*AgentChatResponse) error
-	Recv() (*ChatRequest, error)
+type AureliusAgentManager_JobChatServer interface {
+	SendAndClose(*JobChatResponse) error
+	Recv() (*JobChatRequest, error)
 	grpc.ServerStream
 }
 
-type aureliusAgentManagerAgentChatServer struct {
+type aureliusAgentManagerJobChatServer struct {
 	grpc.ServerStream
 }
 
-func (x *aureliusAgentManagerAgentChatServer) Send(m *AgentChatResponse) error {
+func (x *aureliusAgentManagerJobChatServer) SendAndClose(m *JobChatResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
-func (x *aureliusAgentManagerAgentChatServer) Recv() (*ChatRequest, error) {
-	m := new(ChatRequest)
+func (x *aureliusAgentManagerJobChatServer) Recv() (*JobChatRequest, error) {
+	m := new(JobChatRequest)
 	if err := x.ServerStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
 	return m, nil
+}
+
+func _AureliusAgentManager_RegisterAgent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RegisterAgentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AureliusAgentManagerServer).RegisterAgent(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/AureliusAgentManager/RegisterAgent",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AureliusAgentManagerServer).RegisterAgent(ctx, req.(*RegisterAgentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 // AureliusAgentManager_ServiceDesc is the grpc.ServiceDesc for AureliusAgentManager service.
@@ -124,12 +159,16 @@ func (x *aureliusAgentManagerAgentChatServer) Recv() (*ChatRequest, error) {
 var AureliusAgentManager_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "AureliusAgentManager",
 	HandlerType: (*AureliusAgentManagerServer)(nil),
-	Methods:     []grpc.MethodDesc{},
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "RegisterAgent",
+			Handler:    _AureliusAgentManager_RegisterAgent_Handler,
+		},
+	},
 	Streams: []grpc.StreamDesc{
 		{
-			StreamName:    "AgentChat",
-			Handler:       _AureliusAgentManager_AgentChat_Handler,
-			ServerStreams: true,
+			StreamName:    "JobChat",
+			Handler:       _AureliusAgentManager_JobChat_Handler,
 			ClientStreams: true,
 		},
 	},

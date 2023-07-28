@@ -2,17 +2,17 @@ package bundler
 
 import (
 	"aurelius/apps/aurelius-rest/controllers"
-	"aurelius/apps/aurelius-rest/db"
 	"aurelius/apps/aurelius-rest/routes"
 	"aurelius/apps/aurelius-rest/service"
 	"aurelius/libs/aurelius-mysql/bundler"
+	"aurelius/libs/aurelius-mysql/options"
 	"context"
 	"fmt"
 	"go.uber.org/fx"
 )
 
 var Module = fx.Options(
-	fx.Provide(db.NewDbOptions),
+	fx.Provide(options.NewDbOptions),
 	bundler.Module,
 	controllers.Module,
 	service.Module,
