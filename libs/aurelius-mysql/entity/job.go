@@ -11,9 +11,8 @@ type Job struct {
 	Agent             *Agent    `gorm:"foreignKey:AgentID"`
 	AgentRegistration int
 	Name              string
+	Cron              null.String
 	Version           string
-	StartedAt         null.Time
-	FinishedAt        null.Time
 }
 
 func (Job) TableName() string {

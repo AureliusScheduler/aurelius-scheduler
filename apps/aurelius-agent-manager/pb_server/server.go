@@ -56,64 +56,6 @@ func (s *PbServer) RegisterAgent(ctx context.Context, request *aurelius_protobuf
 	return &res, nil
 }
 
-//func (s *PbServer) RegisterJob(ctx context.Context, request *aurelius_protobuf.RegisterJobRequest) (*aurelius_protobuf.RegisterJobResponse, error) {
-//  log.Println("Start RegisterJob")
-//
-//  res := aurelius_protobuf.RegisterJobResponse{
-//    JobId:   "123132",
-//    Message: "Job registered",
-//  }
-//
-//  return &res, nil
-//}
-
-//func (s *PbServer) AgentChat(srv aurelius_protobuf.AureliusAgentManager_AgentChatServer) error {
-//	log.Println("Start AgentChat")
-//	ctx := srv.Context()
-//
-//	for {
-//		select {
-//		case <-ctx.Done():
-//			log.Println("AgentChat Done")
-//			return ctx.Err()
-//		default:
-//		}
-//
-//		req, err := srv.Recv()
-//
-//		if err != nil {
-//			log.Println("AgentChat Recv Error")
-//			return err
-//		}
-//
-//		log.Println("AgentChat Recv", req)
-//
-//		response := ""
-//
-//		switch payload := req.Payload.(type) {
-//		case *aurelius_protobuf.ChatRequest_RegisterAgentRequest:
-//			registerAgentRequest := payload.RegisterAgentRequest
-//			log.Println("Register agent request", registerAgentRequest)
-//			response = "Agent registered"
-//
-//		case *aurelius_protobuf.ChatRequest_RegisterJobRequest:
-//			registerJobRequest := payload.RegisterJobRequest
-//			log.Println("Register job request", registerJobRequest)
-//			response = "Job registered"
-//		}
-//
-//		res := aurelius_protobuf.AgentChatResponse{
-//			Message: response,
-//		}
-//
-//		if err := srv.Send(&res); err != nil {
-//			log.Println("AgentChat Send Error")
-//		}
-//
-//		log.Println("AgentChat Send", res)
-//	}
-//}
-
 func (s *PbServer) Listen() {
 	lis, err := net.Listen("tcp", ":9000")
 

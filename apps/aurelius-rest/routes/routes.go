@@ -35,6 +35,7 @@ func registerRoutes(
 	jobRoutes := handler.Gin.Group("/jobs")
 	{
 		jobRoutes.GET("/", jobController.Get)
+		jobRoutes.PATCH("/:id", jobController.Patch)
 	}
 
 	agentRoutes := handler.Gin.Group("/agents")

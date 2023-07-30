@@ -59,6 +59,43 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/jobs/{id}": {
+            "patch": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "jobs"
+                ],
+                "summary": "Update a scheduled job",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Job ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Job input",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.JobInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Job updated successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -104,6 +141,14 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "version": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.JobInput": {
+            "type": "object",
+            "properties": {
+                "cron": {
                     "type": "string"
                 }
             }

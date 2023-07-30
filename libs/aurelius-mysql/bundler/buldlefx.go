@@ -9,5 +9,6 @@ import (
 
 var Module = fx.Options(
 	fx.Provide(db_context.NewDbContext),
-	repository.Module,
+	fx.Provide(repository.NewJobRepository),
+	fx.Provide(repository.NewJobInstanceRepository),
 )

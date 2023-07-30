@@ -8,6 +8,10 @@ service AureliusAgentManager {
   rpc RegisterAgent(RegisterAgentRequest) returns (RegisterAgentResponse) {}
 }
 
+service AureliusJobManager {
+  rpc RunJob(RunJobRequest) returns (stream RunJobStatus) {}
+}
+
 message RunJobRequest {
   string jobName = 1;
   string jobVersion = 2;

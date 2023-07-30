@@ -11,9 +11,9 @@ type AgentService struct {
 	dbContext *db_context.DbContext
 }
 
-func NewAgentService(ctx db_context.DbContext) *AgentService {
+func NewAgentService(ctx *db_context.DbContext) *AgentService {
 	return &AgentService{
-		dbContext: &ctx,
+		dbContext: ctx,
 	}
 }
 
@@ -25,14 +25,14 @@ func (s *AgentService) GetAll() ([]dto.AgentDto, error) {
 		return nil, result.Error
 	}
 
-	var agentDtos []dto.AgentDto
+	agentDtos := make([]dto.AgentDto, 0)
 
 	for _, agent := range agents {
 		agentDtos = append(agentDtos, dto.AgentDto{
 			ID:           agent.ID.String(),
-			Service:      agent.ServiceName,
-			AgentStack:   agent.AgentStack,
-			AgentVersion: agent.AgentVersion,
+			Service:      agent.Name,
+			AgentStack:   agent.Stack,
+			AgentVersion: agent.Version,
 			RegisteredAt: agent.RegisteredAt.Format(time.RFC3339),
 			LastSeenAt:   agent.LastSeenAt.Format(time.RFC3339),
 		})

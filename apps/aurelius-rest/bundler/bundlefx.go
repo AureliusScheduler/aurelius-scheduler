@@ -6,17 +6,22 @@ import (
 	"aurelius/apps/aurelius-rest/service"
 	"aurelius/libs/aurelius-mysql/bundler"
 	"aurelius/libs/aurelius-mysql/options"
+	"aurelius/libs/aurelius_service"
 	"context"
 	"fmt"
 	"go.uber.org/fx"
 )
 
 var Module = fx.Options(
-	fx.Provide(options.NewDbOptions),
 	bundler.Module,
 	controllers.Module,
 	service.Module,
 	routes.Module,
+	fx.Provide(aurelius_service.NewJobService),
+	fx.Provide(options.NewDbOptions),
+	fx.Provide(func() aurelius_service.NowProvider {
+		return aurelius_service.RealNowProvider{}
+	}),
 	fx.Invoke(runApplication),
 )
 

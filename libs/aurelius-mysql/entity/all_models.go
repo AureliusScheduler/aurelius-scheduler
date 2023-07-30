@@ -5,5 +5,4 @@ var AllModels = []interface{}{
 	&Job{},
 	&JobInstance{},
 	&JobInstanceLog{},
-	&JobSchedule{},
 }

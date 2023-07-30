@@ -2,53 +2,34 @@ package repository
 
 import (
 	"aurelius/libs/aurelius-mysql/db_context"
-	"aurelius/libs/aurelius-storage"
-	"context"
-	"github.com/doug-martin/goqu/v9"
+	"aurelius/libs/aurelius-mysql/entity"
+	"github.com/gofrs/uuid"
+	"gorm.io/gorm"
 )
 
-type MySQLJobRepository struct {
-	dbContext db_context.DbContext
-	dialect   *goqu.DialectWrapper
+type JobRepository struct {
+	dbContext *db_context.DbContext
 }
 
 // NewJobRepository creates a new JobRepository
-func NewMySQLJobRepository(dbContext db_context.DbContext) storage.JobRepository {
-	dialect := goqu.Dialect("mysql")
-	return &MySQLJobRepository{dbContext: dbContext, dialect: &dialect}
+func NewJobRepository(dbContext *db_context.DbContext) *JobRepository {
+	return &JobRepository{dbContext: dbContext}
 }
 
-// GetAll Get all jobs
-func (r *MySQLJobRepository) GetAll() ([]storage.Job, error) {
-	var jobs []storage.Job
+func (r *JobRepository) FindByUUID(uuid uuid.UUID) (*entity.Job, error) {
+	var job entity.Job
 
-	ds := r.dialect.From("jobs").Select("id", "name", "cron_expression")
-	q, _, _ := ds.ToSQL()
+	result := r.dbContext.GormDb.
+		Where("id = ?", uuid).
+		First(&job)
 
-	rows, err := r.dbContext.Db.QueryContext(context.Background(), q)
-
-	if err != nil {
-		return nil, err
-	}
-
-	for rows.Next() {
-		var job storage.Job
-		err := rows.Scan(&job.ID, &job.Name, &job.CronExpression)
-
-		if err != nil {
-			return nil, err
+	if result.Error != nil {
+		if result.Error == gorm.ErrRecordNotFound {
+			return nil, nil
 		}
 
-		jobs = append(jobs, job)
+		return nil, result.Error
 	}
 
-	return jobs, nil
-}
-
-// Create a new job
-func (r *MySQLJobRepository) Create(job *storage.Job) error {
-	ds := r.dialect.Insert("jobs").Rows(goqu.Record{"id": job.ID, "name": job.Name, "cron_expression": job.CronExpression})
-	q, _, _ := ds.ToSQL()
-	_, err := r.dbContext.Db.ExecContext(context.Background(), q)
-	return err
+	return &job, nil
 }
